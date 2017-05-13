@@ -5,15 +5,13 @@ VERSION="0.2.2"
 function k_os_settings() {
 	echo "Must set K_OS before running, values include:"
 	echo "    ANTERGOS"
-	# echo "    OSX"
-	# echo "    UBUNTU"
 	echo "Exiting..."
 	exit 1
 }
 
 # Check that variables set correctly
 K_OS="ANTERGOS"
-LUSER="kevin"
+LUSER="jarl"
 
 function antergos_mirror_list(){
 	ODIR="$(pwd)"
@@ -27,10 +25,10 @@ function antergos_mirror_list(){
 
 function pacman_mirror_list() {
 	ODIR="$(pwd)"
-	echo -n "Downloading the latest Arch US mirrors..."
+	echo -n "Downloading the latest Arch NO mirrors..."
 	cd /etc/pacman.d
 	mv mirrorlist mirrorlist.backup
-	curl -Ls https://www.archlinux.org/mirrorlist/\?country\=US | sed -e 's/^#Server/Server/g' > mirrorlist-us
+	curl -Ls https://www.archlinux.org/mirrorlist/\?country\=NO | sed -e 's/^#Server/Server/g' > mirrorlist-us
 	echo "done"
 	echo -n "Listing Arch mirrors by speed..."
 	rankmirrors mirrorlist-us > mirrorlist
@@ -47,38 +45,13 @@ function arch_update_and_upgrade(){
 
 function arch_install_base(){
 	echo "Installing base terminal applications..."
-	pacman -S zsh git vim --noconfirm
+	pacman -S zsh git --noconfirm
 }
 
 function arch_install_base_gui(){
 	arch_install_base
 	echo "Installing base GUI software..."
-	pacman -S firefox guake vlc terminator --noconfirm
-}
-
-function arch_install_aur_base(){
-	# Install aura
-	ODIR="$(pwd)"
-	cd ~
-	mkdir -p Builds
-	cd Builds
-	echo -n "Downloading aura-bin from the AUR..."
-	curl -Lso aura-bin.tar.gz https://aur.archlinux.org/packages/au/aura-bin/aura-bin.tar.gz
-	echo "done"
-	tar xf aura-bin.tar.gz
-	cd aura-bin
-	echo "Running makepkg for aura..."
-	#makepkg -sci
-	echo -n "Cleaning up..."
-	cd ..
-	#rm -r aura-bin
-	echo "done"
-	cd "${ODIR}"
-}
-
-function arch_install_aur_base_gui(){
-	arch_install_aur_base
-	 #arua -A sublime-text-dev haroopad conky-lua-nv google-chrome byobu
+	pacman -S firefox --noconfirm
 }
 
 function linux_setup_home(){
@@ -101,15 +74,15 @@ function linux_setup_home(){
 
 function linux_setup_git(){
 	echo -n "Configuring git..."
-	git config --global user.name "Kevin K."
-	git config --global user.email "kbknapp@gmail.com"
+	git config --global user.name "Jarl André Hübenthal"
+	git config --global user.email "jarl.andre@gmail.com"
 	git config --global color.ui true
 	echo "done"
 }
 
 function linux_setup_ssh_client(){
 	echo "Configuring SSH..."
-	ssh-keygen -t rsa -C "kbknapp@gmail.com"
+	ssh-keygen -t rsa -C "jarl.andre@gmail.com"
 	eval "$(ssh-agent -s)"
 	ssh-add ~/.ssh/id_rsa
 }
@@ -146,60 +119,9 @@ function linux_gnome_startup_apps(){
 		echo "found"
 	fi
 	cd .config/autostart
-	echo -n "Adding guake to autostart..."
-	cp ~/.dotfiles/guake/guake.desktop ~/.config/autostart
-	echo "done"
-	echo -n "Adding ConkyBar to autostart..."
-	cp ~/.dotfiles/conky/conkybar.desktop ~/.config/autostart
 	echo "done"
 	cd "${ODIR}"
 }
-
-function linux_setup_vim(){
-	# Setting up vim for user
-	ODIR="$(pwd)"
-	cd ~ 
-	echo "Setting up vim for $USER..."
-	ln -s .dotfiles/vim .vim
-	ln -s .vim/vimrc-linux .vimrc
-	cd .vim/bundle
-	git clone https://github.com/gmarik/Vundle.vim
-	vim +PluginInstall +qall
-	cd "${ODIR}"
-}
-
-function linux_setup_conky(){
-	ODIR="$(pwd)"
-	echo "Cloning ConkyBar..."
-	cd ~/.config
-	git clone https://github.com/kbknapp/conkybar.git conky
-	cd "${ODIR}"
-}
-
-function linux_setup_byobu(){
-	ODIR="$(pwd)"
-	echo -n "Copying byobu keybindings files..."
-	cp /home/$1/.dotfiles/byobu/* /usr/share/byobu/keybindings
-	echo "done"
-	cd "${ODIR}"
-}
-
-# Setting up Go
-# cd ~
-# mkdir -p .go/{bin,src/github.com,pkg}
-# export GOPATH=$HOME/.go
-# Used for stale packages in Go 1.3.1
-#  go install std
-# go get code.google.com/p/go.tools/cmd/goimports
-
-# Setting up Rust
-# cd ~
-# mkdir -p Projects/rust-nightlies
-# mkdir -p .rust/{bin,pkg,src/github.com}
-# cd ~/Projects/rust-nightlies
-# curl -LSso rustup.sh https://static.rust-lang.org/rustup.sh
-# chmod +x rustup.sh
-#  ./rustup.sh
 
 echo "############################"
 echo "## Kustom Baseline v$VERSION"
@@ -242,19 +164,9 @@ case "$K_OS" in
 		linux_setup_zsh
 		linux_setup_zsh
 
-		# Set up vim
-		linux_setup_vim
-		linux_setup_vim
-
-		# Set up conky
-		linux_setup_conky
-
 		# Set up GNOME startup programs
 		linux_gnome_startup_apps
 
-		# Set byobu keybindings
-		LOCAL_USER=$USER
-		linux_setup_byobu "$LOCAL_USER"
 		;;
 	*)
 		k_os_settings
