@@ -45,7 +45,14 @@ function arch_update_and_upgrade(){
 
 function arch_install_base(){
 	echo "Installing base terminal applications..."
-	pacman -S zsh git --noconfirm
+	pacman -S zsh git scala sbt docker nvm --noconfirm
+	sudo -i -u $USER nvn install 7.5
+	sudo -i -u $USER nvn use 7.5
+	systemctl enable docker.service
+	systemctl start docker.service
+	docker info
+	usermod -aG docker $USER
+	sudo -i -u $LUSER newgrp docker
 }
 
 function arch_install_base_gui(){
