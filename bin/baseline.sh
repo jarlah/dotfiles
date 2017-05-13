@@ -44,15 +44,16 @@ function arch_update_and_upgrade(){
 }
 
 function arch_install_base(){
-	echo "Installing base terminal applications..."
-	pacman -S zsh git scala sbt docker nvm --noconfirm
-	sudo -i -u $USER nvn install 7.5
-	sudo -i -u $USER nvn use 7.5
-	systemctl enable docker.service
-	systemctl start docker.service
-	docker info
-	usermod -aG docker $USER
-	sudo -i -u $LUSER newgrp docker
+        echo "Installing base terminal applications..."
+        pacman -S zsh git scala sbt docker --noconfirm
+        sudo -i -u $LUSER curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+        sudo -i -u $LUSER nvm install 7.5
+        sudo -i -u $LUSER nvm use 7.5
+        systemctl enable docker.service
+        systemctl start docker.service
+        docker info
+        usermod -aG docker $LUSER
+        sudo -i -u $LUSER newgrp docker
 }
 
 function arch_install_base_gui(){
