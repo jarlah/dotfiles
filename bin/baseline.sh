@@ -52,7 +52,7 @@ function arch_install_base(){
         systemctl start docker.service
         docker info
         usermod -aG docker $LUSER
-        sudo -i -u $LUSER newgrp docker
+	echo "Reboot or run newgrp docker to work with docker"
 }
 
 function arch_install_base_gui(){
