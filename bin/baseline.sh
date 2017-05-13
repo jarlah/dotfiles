@@ -45,7 +45,7 @@ function arch_update_and_upgrade(){
 
 function arch_install_base(){
         echo "Installing base terminal applications..."
-        pacman -S zsh git scala jre8-openjdk sbt docker --noconfirm
+        pacman -S zsh git scala jre8-openjdk sbt docker emacs --noconfirm
 	ODIR="$(pwd)"
 	sudo -i -u $LUSER sh $ODIR/node/nvm.sh
         systemctl enable docker.service
@@ -58,7 +58,7 @@ function arch_install_base(){
 function arch_install_base_gui(){
 	arch_install_base
 	echo "Installing base GUI software..."
-	pacman -S firefox --noconfirm
+	pacman -S firefox intellij-idea-ultimate-edition atom --noconfirm
 }
 
 function linux_setup_home(){
@@ -150,7 +150,7 @@ case "$K_OS" in
 		
 		# Debloat the system
 		echo -n "Removing bloat software..."
-		sh -c "pacman -Rns gnome-robots gnome-chess gnome-tetravex gnome-nibbles xnoise empathy anjuta aisleriot accerciser gnome-ku gnome-mahjongg  four-in-a-row five-or-more evolution gnome-klotski iagno gnome-mines polari quadrapassel tali swell-foop transmission-cli --noconfirm 2>/dev/null"
+		pacman -Rns gnome-robots gnome-chess gnome-tetravex gnome-nibbles xnoise empathy anjuta aisleriot accerciser gnome-ku gnome-mahjongg  four-in-a-row five-or-more evolution gnome-klotski iagno gnome-mines polari quadrapassel tali swell-foop transmission-cli --noconfirm
 		echo "done"
 
 		# Install common software
