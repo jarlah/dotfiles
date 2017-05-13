@@ -57,8 +57,8 @@ function arch_install_base_gui(){
 function linux_setup_home(){
 	# Set up user home
 	ODIR="$(pwd)"
-	cd /home/$USER
-	echo -n "Creating required home directories for $USER..."
+	cd /home/$LUSER
+	echo -n "Creating required home directories for $LUSER..."
 	mkdir -p {.tmp,.bin,Projects}
 	echo "done"
 	echo -n "Checking for dotfiles repo..."
@@ -74,22 +74,22 @@ function linux_setup_home(){
 
 function linux_setup_git(){
 	echo -n "Configuring git..."
-	sudo -i -u $USER git config --global user.name "Jarl André Hübenthal"
-	sudo -i -u $USER git config --global user.email "jarl.andre@gmail.com"
-	sudo -i -u $USER git config --global color.ui true
+	sudo -i -u $LUSER git config --global user.name "Jarl André Hübenthal"
+	sudo -i -u $LUSER git config --global user.email "jarl.andre@gmail.com"
+	sudo -i -u $LUSER git config --global color.ui true
 	echo "done"
 }
 
 function linux_setup_ssh_client(){
 	echo "Configuring SSH..."
-	sudo -i -u $USER ssh-keygen -t rsa -C "jarl.andre@gmail.com"
-	sudo -i -u $USER eval "$(ssh-agent -s)"
-	sudo -i -u $USER ssh-add ~/.ssh/id_rsa
+	sudo -i -u $LUSER ssh-keygen -t rsa -C "jarl.andre@gmail.com"
+	sudo -i -u $LUSER eval "$(ssh-agent -s)"
+	sudo -i -u $LUSER ssh-add ~/.ssh/id_rsa
 }
 
 function linux_setup_zsh(){
 	ODIR="$(pwd)"
-	cd /home/$USER
+	cd /home/$LUSER
 	echo -n "Checking for oh-my-zsh..."
 	if [[ ! -d  .oh-my-zsh ]]; then
 		echo "not found"
@@ -102,14 +102,14 @@ function linux_setup_zsh(){
 	cp .dotfiles/zsh/zshrc-linux .zshrc
 	cp .dotfiles/zsh/kustom-linux.zsh-theme .oh-my-zsh/themes
 	cat .dotfiles/zsh/addons/git.zshrc-addon >> .zshrc
-	chsh -s "$(which zsh)" "$USER"
+	chsh -s "$(which zsh)" "$LUSER"
 	echo "done"
 	cd "${ODIR}"
 }
 
 function linux_gnome_startup_apps(){
 	ODIR="$(pwd)"
-	cd /home/$USER
+	cd /home/$LUSER
 	echo "Configuring GNOME startup applications..."
 	echo -n "Checking for ~/.config/autostart..."
 	if [[ ! -d .config/autostart ]]; then
@@ -148,7 +148,6 @@ case "$K_OS" in
 
 		# Install common software
 		arch_install_base_gui
-		arch_install_aur_base_gui
 
 		# Set up /home
 		linux_setup_home
