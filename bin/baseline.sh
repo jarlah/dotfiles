@@ -45,7 +45,7 @@ function arch_update_and_upgrade(){
 
 function arch_install_base(){
         echo "Installing base terminal applications..."
-        pacman -S zsh git scala sbt docker --noconfirm
+        pacman -S zsh git scala jre8-openjdk sbt docker --noconfirm
         sudo -i -u $LUSER curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
         sudo -i -u $LUSER nvm install 7.5
         sudo -i -u $LUSER nvm use 7.5
