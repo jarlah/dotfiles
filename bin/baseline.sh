@@ -129,6 +129,10 @@ function linux_gnome_startup_apps(){
 	cd "${ODIR}"
 }
 
+function blacklist_nouveau() {
+	cp nouveau/blacklist.conf /etc/modprobe.d/blacklist.conf
+}
+
 echo "############################"
 echo "## Kustom Baseline v$VERSION"
 echo "############################"
@@ -137,6 +141,8 @@ echo
 case "$K_OS" in
 	ANTERGOS)
 		echo "OS set to ${K_OS}..."
+
+		blacklist_nouveau
 		
 		# Set up mirror lists
 		#echo -n "Enabling [multilib] repos..."
