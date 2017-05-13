@@ -65,7 +65,7 @@ function linux_setup_home(){
 	if [[ ! -d .dotfiles ]]; then
 		echo "not found"
 		echo "Cloning dotfiles repo..."
-		git clone https://github.com/kbknapp/dotfiles .dotfiles
+		git clone https://github.com/jarlah/dotfiles .dotfiles
 	else
 		echo "found"
 	fi
@@ -133,8 +133,8 @@ case "$K_OS" in
 		echo "OS set to ${K_OS}..."
 		
 		# Set up mirror lists
-		echo -n "Enabling [multilib] repos..."
-		sh -c "echo \"[multilib]\" >> /etc/pacman.conf"
+		#echo -n "Enabling [multilib] repos..."
+		#sh -c "echo \"[multilib]\" >> /etc/pacman.conf"
 		sh -c "echo \"Include = /etc/pacman.d/mirrorlist\" >> /etc/pacman.conf"
 		echo "done"
 
