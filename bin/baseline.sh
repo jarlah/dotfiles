@@ -89,9 +89,8 @@ function linux_setup_git(){
 
 function linux_setup_ssh_client(){
 	echo "Configuring SSH..."
-	sudo -i -u $LUSER ssh-keygen -t rsa -C "jarl.andre@gmail.com"
-	sudo -i -u $LUSER eval "$(ssh-agent -s)"
-	sudo -i -u $LUSER ssh-add ~/.ssh/id_rsa
+	ODIR="$(pwd)"
+        sudo -iH -u $LUSER sh $ODIR/ssh/ssh-keygen.sh
 }
 
 function linux_setup_zsh(){
