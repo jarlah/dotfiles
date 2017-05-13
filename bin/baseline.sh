@@ -57,12 +57,12 @@ function arch_install_base_gui(){
 function linux_setup_home(){
 	# Set up user home
 	ODIR="$(pwd)"
-	cd ~
+	cd /home/$USER
 	echo -n "Creating required home directories for $USER..."
 	mkdir -p {.tmp,.bin,Projects}
 	echo "done"
 	echo -n "Checking for dotfiles repo..."
-	if [[ ! -d ~/.dotfiles ]]; then
+	if [[ ! -d .dotfiles ]]; then
 		echo "not found"
 		echo "Cloning dotfiles repo..."
 		git clone https://github.com/kbknapp/dotfiles .dotfiles
@@ -74,24 +74,24 @@ function linux_setup_home(){
 
 function linux_setup_git(){
 	echo -n "Configuring git..."
-	git config --global user.name "Jarl André Hübenthal"
-	git config --global user.email "jarl.andre@gmail.com"
-	git config --global color.ui true
+	sudo -i -u $USER git config --global user.name "Jarl André Hübenthal"
+	sudo -i -u $USER git config --global user.email "jarl.andre@gmail.com"
+	sudo -i -u $USER git config --global color.ui true
 	echo "done"
 }
 
 function linux_setup_ssh_client(){
 	echo "Configuring SSH..."
-	ssh-keygen -t rsa -C "jarl.andre@gmail.com"
-	eval "$(ssh-agent -s)"
-	ssh-add ~/.ssh/id_rsa
+	sudo -i -u $USER ssh-keygen -t rsa -C "jarl.andre@gmail.com"
+	sudo -i -u $USER eval "$(ssh-agent -s)"
+	sudo -i -u $USER ssh-add ~/.ssh/id_rsa
 }
 
 function linux_setup_zsh(){
 	ODIR="$(pwd)"
-	cd ~
+	cd /home/$USER
 	echo -n "Checking for oh-my-zsh..."
-	if [[ ! -d  ~/.oh-my-zsh ]]; then
+	if [[ ! -d  .oh-my-zsh ]]; then
 		echo "not found"
 		echo "Cloning oh-my-zsh repo"
 		git clone https://github.com/robbyrussell/oh-my-zsh .oh-my-zsh
@@ -109,7 +109,7 @@ function linux_setup_zsh(){
 
 function linux_gnome_startup_apps(){
 	ODIR="$(pwd)"
-	cd ~
+	cd /home/$USER
 	echo "Configuring GNOME startup applications..."
 	echo -n "Checking for ~/.config/autostart..."
 	if [[ ! -d .config/autostart ]]; then
