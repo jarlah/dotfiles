@@ -149,29 +149,37 @@ case "$K_OS" in
 		
 		# Debloat the system
 		echo -n "Removing bloat software..."
-		pacman -Rns pidgin --noconfirm
-		pacman -Rns gnome-robots  --noconfirm
-		pacman -Rns gnome-chess  --noconfirm
-		pacman -Rns gnome-tetravex  --noconfirm
-		pacman -Rns gnome-nibbles  --noconfirm
-		pacman -Rns xnoise  --noconfirm
-		pacman -Rns empathy  --noconfirm
-		pacman -Rns anjuta  --noconfirm
-		pacman -Rns aisleriot  --noconfirm
-		pacman -Rns accerciser  --noconfirm
-		pacman -Rns gnome-ku  --noconfirm
-		pacman -Rns gnome-mahjongg  --noconfirm
-		pacman -Rns four-in-a-row  --noconfirm
-		pacman -Rns five-or-more  --noconfirm
-		pacman -Rns evolution  --noconfirm
-		pacman -Rns gnome-klotski  --noconfirm
-		pacman -Rns iagno  --noconfirm
-		pacman -Rns gnome-mines --noconfirm
-		pacman -Rns polari --noconfirm
-		pacman -Rns quadrapassel --noconfirm
-		pacman -Rns tali --noconfirm
-		pacman -Rns swell-foop --noconfirm
-		pacman -Rns transmission-cli --noconfirm
+		BLOAT=( 
+		  "pidgin",
+		  "gnome-robots", 
+		  "gnome-chess",
+		  "gnome-tetravex",
+		  "gnome-nibbles",
+		  "xnoise",
+		  "empathy",
+		  "anjuta",
+		  "aisleriot",
+		  "accerciser",
+		  "gnome-ku",
+		  "gnome-mahjongg",
+		  "four-in-a-row",
+		  "five-or-more",
+		  "evolution",
+		  "gnome-klotski", 
+		  "iagno",
+		  "gnome-mines",
+		  "polari",
+		  "quadrapassel",
+	  	  "tali",
+		  "swell-foop",
+		  "transimission-cli",
+		  "transmission"
+		)
+		for toRemove in "${BLOAT[@]}"
+		do
+		   : 
+		   pacman -Rns $toRemove --noconfirm
+		done
 		echo "done"
 
 		# Install common software
