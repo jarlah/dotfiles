@@ -46,7 +46,8 @@ function arch_update_and_upgrade(){
 function arch_install_base(){
         echo "Installing base terminal applications..."
         pacman -S zsh git scala jre8-openjdk sbt docker --noconfirm
-	sudo -i -u $LUSER ./nvm.sh
+	ODIR="$(pwd)"
+	sudo -i -u $LUSER sh $ODIR/scripts/nvm.sh
         systemctl enable docker.service
         systemctl start docker.service
         docker info
