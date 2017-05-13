@@ -172,6 +172,7 @@ case "$K_OS" in
 		  "quadrapassel"
 	  	  "tali"
 		  "swell-foop"
+		  "transmission-gtk"
 		  "transimission-cli"
 		  "transmission"
 		)
