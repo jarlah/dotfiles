@@ -1,2 +1,2 @@
 #!/bin/bash
-pacman -Syu --noconfirm && aura -Akuax --noconfirm
+pacman -Syu --noconfirm
