@@ -59,6 +59,7 @@ function arch_install_base_gui(){
 	arch_install_base
 	echo "Installing base GUI software..."
 	pacman -S firefox intellij-idea-ultimate-edition atom --noconfirm
+	echo "done"
 }
 
 function linux_setup_home(){
@@ -76,6 +77,7 @@ function linux_setup_home(){
 	else
 		echo "found"
 	fi
+	echo "done"
 	cd "${ODIR}"
 }
 
@@ -91,6 +93,7 @@ function linux_setup_ssh_client(){
 	echo "Configuring SSH..."
 	ODIR="$(pwd)"
         sudo -iH -u $LUSER sh $ODIR/ssh/ssh-keygen.sh
+	echo "done"
 }
 
 function linux_setup_zsh(){
@@ -130,85 +133,75 @@ function linux_gnome_startup_apps(){
 }
 
 function blacklist_nouveau() {
+	echo -n "Disabling nouevau..."
 	cp nouveau/blacklist.conf /etc/modprobe.d/blacklist.conf
+	echo "done"
+}
+
+function disable_tap_to_click() {
+	echo -n "Disabling tap to click...."
+	sed -i 's/Option "TapButton1" "1"/#Option "TapButton1" "1"/g' /etc/X11/xorg.conf.d/50-synaptics.conf 
+ 	sed -i 's/Option "TapButton2" "2"/#Option "TapButton2" "2"/g' /etc/X11/xorg.conf.d/50-synaptics.conf 
+ 	sed -i 's/Option "TapButton3" "3"/#Option "TapButton3" "3"/g' /etc/X11/xorg.conf.d/50-synaptics.conf 
+	echo "done"
+}
+
+function remove_bloat_software() {
+	echo "Removing bloat software..."
+	BLOAT=( 
+	  "pidgin"
+	  "gnome-robots" 
+	  "gnome-chess"
+	  "gnome-tetravex"
+	  "gnome-nibbles"
+	  "xnoise"
+	  "empathy"
+	  "anjuta"
+	  "aisleriot"
+	  "accerciser"
+	  "gnome-ku"
+	  "gnome-mahjongg"
+	  "four-in-a-row"
+	  "five-or-more"
+	  "evolution"
+	  "gnome-klotski" 
+	  "iagno"
+	  "gnome-mines"
+	  "polari"
+	  "quadrapassel"
+  	  "tali"
+	  "swell-foop"
+	  "transmission-gtk"
+	  "transimission-cli"
+	  "transmission"
+	)
+	for toRemove in "${BLOAT[@]}"
+	do
+	   : 
+	   pacman -Rns $toRemove --noconfirm
+	done
+	echo "done"
 }
 
 echo "############################"
-echo "## Kustom Baseline v$VERSION"
+echo "## Custom Baseline v$VERSION"
 echo "############################"
 echo
 
 case "$K_OS" in
 	ANTERGOS)
 		echo "OS set to ${K_OS}..."
-
 		blacklist_nouveau
-		
-		# Set up mirror lists
-		#echo -n "Enabling [multilib] repos..."
-		#sh -c "echo \"[multilib]\" >> /etc/pacman.conf"
-		sh -c "echo \"Include = /etc/pacman.d/mirrorlist\" >> /etc/pacman.conf"
-		echo "done"
-
+		disable_tap_to_click
 		pacman_mirror_list
 		antergos_mirror_list	
-		
-		# Debloat the system
-		echo -n "Removing bloat software..."
-		BLOAT=( 
-		  "pidgin"
-		  "gnome-robots" 
-		  "gnome-chess"
-		  "gnome-tetravex"
-		  "gnome-nibbles"
-		  "xnoise"
-		  "empathy"
-		  "anjuta"
-		  "aisleriot"
-		  "accerciser"
-		  "gnome-ku"
-		  "gnome-mahjongg"
-		  "four-in-a-row"
-		  "five-or-more"
-		  "evolution"
-		  "gnome-klotski" 
-		  "iagno"
-		  "gnome-mines"
-		  "polari"
-		  "quadrapassel"
-	  	  "tali"
-		  "swell-foop"
-		  "transmission-gtk"
-		  "transimission-cli"
-		  "transmission"
-		)
-		for toRemove in "${BLOAT[@]}"
-		do
-		   : 
-		   pacman -Rns $toRemove --noconfirm
-		done
-		echo "done"
-
-		# Install common software
+		remove_bloat_software
 		arch_install_base_gui
-
-		# Set up /home
 		linux_setup_home
-		linux_setup_home
-
-		# Set up git
 		linux_setup_git
-
-		# Set up SSH client
 		linux_setup_ssh_client
-
-		# Set up ZSH
 		linux_setup_zsh
-		linux_setup_zsh
-
-		# Set up GNOME startup programs
 		linux_gnome_startup_apps
-
 		;;
 	*)
 		k_os_settings
