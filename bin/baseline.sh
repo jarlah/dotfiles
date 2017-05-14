@@ -45,7 +45,13 @@ function arch_update_and_upgrade(){
 
 function arch_install_base(){
         echo "Installing base terminal applications..."
-        pacman -S zsh git scala jdk8-openjdk sbt docker emacs htop --noconfirm
+        pacman -S zsh git scala jdk8-openjdk sbt docker emacs htop tlp tlp-rdw firefox atom --noconfirm
+	systemctl enable tlp.service
+	systemctl enable tlp-sleep.service
+	systemctl disable systemd-rfkill.service
+	systemctl mask systemd-rfkill.service
+	systemctl start tlp.service
+	systemctl start tlp-sleep.service
 	ODIR="$(pwd)"
 	sudo -i -u $LUSER sh $ODIR/node/nvm.sh
         systemctl enable docker.service
@@ -53,13 +59,6 @@ function arch_install_base(){
         docker info
         usermod -aG docker $LUSER
 	echo "Reboot or run newgrp docker to work with docker"
-}
-
-function arch_install_base_gui(){
-	arch_install_base
-	echo "Installing base GUI software..."
-	pacman -S firefox atom --noconfirm
-	echo "done"
 }
 
 function linux_setup_home(){
@@ -194,7 +193,7 @@ case "$K_OS" in
 		pacman_mirror_list
 		antergos_mirror_list	
 		remove_bloat_software
-		arch_install_base_gui
+		arch_install_base
 		linux_setup_home
 		linux_setup_git
 		linux_setup_ssh_client
