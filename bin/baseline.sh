@@ -44,15 +44,15 @@ function arch_update_and_upgrade(){
 }
 
 function arch_install_base(){
+	ODIR="$(pwd)"
         echo "Installing base terminal applications..."
-        pacman -S zsh git scala jdk8-openjdk sbt docker emacs htop tlp tlp-rdw firefox atom --noconfirm
+        pacman -S zsh git scala jdk8-openjdk sbt docker docker-compose emacs htop tlp tlp-rdw firefox atom --noconfirm
 	systemctl enable tlp.service
 	systemctl enable tlp-sleep.service
 	systemctl disable systemd-rfkill.service
 	systemctl mask systemd-rfkill.service
 	systemctl start tlp.service
 	systemctl start tlp-sleep.service
-	ODIR="$(pwd)"
 	sudo -i -u $LUSER sh $ODIR/node/nvm.sh
         systemctl enable docker.service
         systemctl start docker.service
