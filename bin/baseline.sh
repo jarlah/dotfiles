@@ -136,6 +136,10 @@ function blacklist_nouveau() {
 	echo "done"
 }
 
+function increase_watch_limit() {
+	echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.conf && sysctl --system
+}
+
 function disable_tap_to_click() {
 	echo -n "Disabling tap to click...."
 	sed -i 's/Option "TapButton1" "1"/#Option "TapButton1" "1"/g' /etc/X11/xorg.conf.d/50-synaptics.conf 
@@ -191,6 +195,7 @@ case "$K_OS" in
 		echo "OS set to ${K_OS}..."
 		blacklist_nouveau
 		disable_tap_to_click
+		increase_watch_limit
 		pacman_mirror_list
 		antergos_mirror_list	
 		remove_bloat_software
