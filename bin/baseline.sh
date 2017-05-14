@@ -57,6 +57,7 @@ function arch_install_base(){
 
 function arch_install_base_gui(){
 	arch_install_base
+	rm /var/lib/pacman/db.lck
 	echo "Installing base GUI software..."
 	pacman -S firefox intellij-idea-ultimate-edition atom --noconfirm
 	echo "done"
