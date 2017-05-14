@@ -57,9 +57,8 @@ function arch_install_base(){
 
 function arch_install_base_gui(){
 	arch_install_base
-	rm /var/lib/pacman/db.lck
 	echo "Installing base GUI software..."
-	pacman -S firefox intellij-idea-ultimate-edition atom --noconfirm
+	pacman -S firefox --noconfirm
 	echo "done"
 }
 
@@ -68,13 +67,13 @@ function linux_setup_home(){
 	ODIR="$(pwd)"
 	cd /home/$LUSER
 	echo -n "Creating required home directories for $LUSER..."
-	mkdir -p {.tmp,.bin,Projects}
+	sudo -iH -u $LUSER mkdir -p {.tmp,.bin,Projects}
 	echo "done"
 	echo -n "Checking for dotfiles repo..."
 	if [[ ! -d .dotfiles ]]; then
 		echo "not found"
 		echo "Cloning dotfiles repo..."
-		git clone https://github.com/jarlah/dotfiles .dotfiles
+		sudo -iH -u $LUSER git clone https://github.com/jarlah/dotfiles .dotfiles
 	else
 		echo "found"
 	fi
@@ -84,9 +83,9 @@ function linux_setup_home(){
 
 function linux_setup_git(){
 	echo -n "Configuring git..."
-	sudo -i -u $LUSER git config --global user.name "Jarl André Hübenthal"
-	sudo -i -u $LUSER git config --global user.email "jarl.andre@gmail.com"
-	sudo -i -u $LUSER git config --global color.ui true
+	sudo -iH -u $LUSER git config --global user.name "Jarl André Hübenthal"
+	sudo -iH -u $LUSER git config --global user.email "jarl.andre@gmail.com"
+	sudo -iH -u $LUSER git config --global color.ui true
 	echo "done"
 }
 
@@ -104,14 +103,14 @@ function linux_setup_zsh(){
 	if [[ ! -d  .oh-my-zsh ]]; then
 		echo "not found"
 		echo "Cloning oh-my-zsh repo"
-		git clone https://github.com/robbyrussell/oh-my-zsh .oh-my-zsh
+		sudo -iH -u $LUSER git clone https://github.com/robbyrussell/oh-my-zsh .oh-my-zsh
 	else
 		echo "found"
 	fi
 	echo -n "Copying zsh profiles..."
-	cp .dotfiles/zsh/zshrc-linux .zshrc
-	cp .dotfiles/zsh/kustom-linux.zsh-theme .oh-my-zsh/themes
-	cat .dotfiles/zsh/addons/git.zshrc-addon >> .zshrc
+	sudo -iH -u $LUSER cp .dotfiles/zsh/zshrc-linux .zshrc
+	sudo -iH -u $LUSER cp .dotfiles/zsh/kustom-linux.zsh-theme .oh-my-zsh/themes
+	sudo -iH -u $LUSER cat .dotfiles/zsh/addons/git.zshrc-addon >> .zshrc
 	chsh -s "$(which zsh)" "$LUSER"
 	echo "done"
 	cd "${ODIR}"
@@ -124,12 +123,10 @@ function linux_gnome_startup_apps(){
 	echo -n "Checking for ~/.config/autostart..."
 	if [[ ! -d .config/autostart ]]; then
 		echo "not found"
-		mkdir -p .config/autostart
+		sudo -iH -u $LUSER mkdir -p .config/autostart
 	else
 		echo "found"
 	fi
-	cd .config/autostart
-	echo "done"
 	cd "${ODIR}"
 }
 
@@ -203,6 +200,7 @@ case "$K_OS" in
 		linux_setup_ssh_client
 		linux_setup_zsh
 		linux_gnome_startup_apps
+		pacman -S intellij-idea-ultimate-edition atom --noconfirm
 		;;
 	*)
 		k_os_settings
