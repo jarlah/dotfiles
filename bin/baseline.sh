@@ -58,7 +58,7 @@ function arch_install_base(){
 function arch_install_base_gui(){
 	arch_install_base
 	echo "Installing base GUI software..."
-	pacman -S firefox --noconfirm
+	pacman -S firefox atom --noconfirm
 	echo "done"
 }
 
@@ -200,7 +200,6 @@ case "$K_OS" in
 		linux_setup_ssh_client
 		linux_setup_zsh
 		linux_gnome_startup_apps
-		pacman -S intellij-idea-ultimate-edition atom --noconfirm
 		;;
 	*)
 		k_os_settings
