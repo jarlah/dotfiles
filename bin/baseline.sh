@@ -46,7 +46,7 @@ function arch_update_and_upgrade(){
 function arch_install_base(){
 	ODIR="$(pwd)"
         echo "Installing base terminal applications..."
-        pacman -S zsh git scala jre8-openjdk jdk8-openjdk sbt docker docker-compose emacs htop tlp tlp-rdw firefox atom virtualbox virtualbox-host-modules-arch net-tools nginx --noconfirm
+        pacman -S zsh git tk scala jre8-openjdk jdk8-openjdk sbt docker docker-compose emacs htop tlp tlp-rdw firefox atom virtualbox virtualbox-host-modules-arch net-tools nginx --noconfirm
 	modprobe vboxdrv
 	systemctl enable nginx.service 
 	systemctl start nginx.service
