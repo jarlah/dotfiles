@@ -85,9 +85,10 @@ function linux_setup_home(){
 
 function linux_setup_git(){
 	echo -n "Configuring git..."
-	sudo -iH -u $LUSER git config --global user.name "Jarl André Hübenthal"
-	sudo -iH -u $LUSER git config --global user.email "jarl.andre@gmail.com"
-	sudo -iH -u $LUSER git config --global color.ui true
+	ODIR="$(pwd)"
+	cd /home/$LUSER
+	sudo -iH -u $LUSER cp .dotfiles/git/.gitconfig .gitconfig
+	cd "${ODIR}"
 	echo "done"
 }
 
